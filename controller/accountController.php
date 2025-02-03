@@ -1,66 +1,119 @@
 <?php
+include './model/account.php';
 
-include 'model/account.php';
-
-
-
-/**
- * @method Inscription d'un utilisateur dans la base de données
- * @param PDO $bdd Instance de la base de données
- * @return string Message de statut pour l'utilisateur
- */
-function inscription(PDO $bdd): void {
-    if (isset($_POST["submit"])) {
-        if (!empty($_POST["lastname"]) && !empty($_POST["firstname"]) && !empty($_POST["email"]) && !empty($_POST["password"])) {
-            
-            // Nettoyage des entrées
-            $lastname = strip_tags($_POST['lastname']);
-            $firstname = strip_tags($_POST['firstname']);
-            $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-            $password = $_POST['password'];
-
-            // Vérification de l'email
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $message = "L'adresse mail est incorrecte.";
-            } else {
-                // Vérification si l'email existe déjà en BDD
-                $query = $bdd->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
-                $query->execute(['email' => $email]);
-                if ($query->fetchColumn() > 0) {
-                    $message = "Un compte avec cette adresse email existe déjà.";
-                } else {
-                    // Hashage du mot de passe et insertion en BDD
-                    //BCRYPT très bien si antèrieur à php 7.2, mais moins performant	
-                    //Argon2 si besoin de plus de sécurité et de performance
-                    $hashedPassword = password_hash($password, PASSWORD_ARGON2ID);
-                    $insertQuery = $bdd->prepare("INSERT INTO users (lastname, firstname, email, password) VALUES (:lastname, :firstname, :email, :password)");
-                    $insertQuery->execute([
-                        'lastname' => $lastname,
-                        'firstname' => $firstname,
-                        'email' => $email,
-                        'password' => $hashedPassword
-                    ]);
-
-                    $message = "Compte créé avec succès !";
-                }
-            }
-        } else {
-            $message = "Tous les champs doivent être remplis.";
+/*
+*@method Créer un nouveau compte utilisateur
+*@param PDO $bdd
+*@return string
+*/
+function signUp(PDO $bdd):string{
+    //Vérifier qu'on reçoit le formulaire
+    if(isset($_POST['submitSignUp'])){
+        //Vérifier les champs vide
+        if(empty($_POST['lastname']) || empty($_POST['firstname']) || empty($_POST['email']) || empty($_POST['password'])){
+            //Retourne le message d'erreur
+            return "Veuillez remplir les champs !";
         }
+
+        //Vérifier le format des données : ici l'email
+        if(!filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)){
+            //Retourne le message d'erreur
+            return "Email pas au bon format !";
+        }
+
+        //Nettoyer les données
+        $lastname = sanitize($_POST['lastname']);
+        $firstname = sanitize($_POST['firstname']);
+        $email = sanitize($_POST['email']);
+        $password = sanitize($_POST['password']);
+
+        //Hasher le mot de passe
+        $password = password_hash($password, PASSWORD_BCRYPT);
+
+        //Vérifier que l'utilisateur n'existe pas déjà en bdd
+        if(!empty(getAccountByEmail($bdd, $email))){
+            //Retourne le message d'erreur
+            return "Cet email existe déjà !";
+        }
+
+        //J'enregistre mon utilisateur en bdd
+        $account = [$firstname, $lastname, $email, $password];
+        addAccount($bdd, $account);
+    
+        return "$firstname $lastname a été enregistré avec succès !";
+    }
+    return '';
+}
+
+function displayAccounts(PDO $bdd){
+    //Récupération de la liste des utilisateurs
+    $data = getAllAccount($bdd);
+
+    $listUsers = "";
+    foreach($data as $account){
+        $listUsers = $listUsers."<li><h2>".$account['firstname'] ." ". $account['lastname']."</h2>      <p>".$account['email']."</p></li>";
+    }
+    return $listUsers;
+}
+
+function renderAccounts(PDO $bdd){
+    $message = signUp($bdd);
+    $listUsers = displayAccounts($bdd);
+    $message2 = userConnexion( $bdd);
+    include "./vue/account.php";
+}
+
+/*
+mettez en place un système de connexion :
+    
+--Vérifier que l'o nreçoit le formulaire de connexion
+--Vérifier les champs vides
+--Vérifier le format d'email
+--Nettoyer les données
+--Vérifier si l'utilisateur existe (si oui récupérer toutes ses données)
+--Vérifier la concordance des mots de passe (utiliser la fonction password_verify()  : à aller voir sur la doc php.net)
+--Enregister les données en Session
+Afficher un message de confirmation 
+*/
+
+function userConnexion(PDO $bdd){
+    //Vérifier qu'on reçoit le formulaire
+    if(isset($_POST['submitSignIn'])){
+
+        //Vérifier les champs vides
+        if(empty($_POST['email']) || empty($_POST['password'])){
+
+            //Retourne le message d'erreur
+            return "Veuillez remplir les champs !";
+        }
+
+        //Vérifier le format des données : ici l'email
+        if(!filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)){
+            //Retourne le message d'erreur
+            return "Email pas au bon format !";
+        }
+
+        //Nettoyer les données
+        $email = sanitize($_POST['email']);
+        $password = sanitize($_POST['password']);
+
+        //Vérifier que l'utilisateur existe déjà en bdd
+        if(!getAccountByEmail($bdd, $email)){
+            return "L'utilisateur n'existe pas";
+        }
+
+        //Vérifier la concordance du mdp
+        $user = getAccountByEmail( $bdd, $email);
+        if(!password_verify($password,$user['password'],)) {
+            return 'Le mot de passe est invalide !';
+        }
+
+        $_SESSION['user'] = [
+            "prénom" => $user["firstname"],
+            "nom" => $user["lastname"],
+            "email" => $user["email"]
+        ];
+
+
     }
 }
-
-/**
- * @method Récupérer tous les utilisateurs de la BDD
- * @param PDO $bdd Instance de la base de données
- * @return array Liste des utilisateurs
- */
-// Fonction pour récupérer tous les utilisateurs
-function getAllUsers(PDO $bdd) {
-    $query = $bdd->query("SELECT id, lastname, firstname, email FROM users ORDER BY lastname ASC");
-    return $query->fetchAll(PDO::FETCH_ASSOC);
-}
-
-// Récupération des utilisateurs
-$users = getAllUsers($bdd);
-

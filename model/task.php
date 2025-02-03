@@ -67,7 +67,7 @@ function deleteTask(PDO $bdd, int $id): void {
  * @param int $id
  * @return array task [id_task, title, content, create_at, status, id_account]
  */
-function getTaskById(PDO $bdd, int $id): ?array {
+function getTaskById(PDO $bdd, int $id): array|null|string {
     try {
         $requete = "SELECT id_task, title, content, create_at, `status`,id_account
         WHERE id_task = ?";
@@ -86,7 +86,7 @@ function getTaskById(PDO $bdd, int $id): ?array {
  * @param PDO $bdd
  * @return array array<task> [id_task, title, content, create_at, status, id_account]
  */
-function getAllTask(PDO $bdd): ?array {
+function getAllTask(PDO $bdd): array|string|null {
     try {
         $requete = "SELECT id_task, title, content, create_at, `status`,id_account";
         $req = $bdd->prepare($requete);

@@ -70,7 +70,7 @@ function deleteCategory(PDO $bdd, string $name): void
  * @param string $name
  * @return array|null
  */
-function getCategoryByName(PDO $bdd, string $name): array|null
+function getCategoryByName(PDO $bdd, string $name): array|null|string
 {
     //Requête
     $requete = "SELECT id_category, name FROM category WHERE name=?";

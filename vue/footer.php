@@ -1,5 +1,5 @@
 <footer>
-    <p>mentions légales</p>
+    <p>Mentions Légales</p>
 </footer>
 
 </body>

@@ -1,33 +1,26 @@
 <section>
-    <form method="POST">
-        <h2>Inscription</h2>
-
-        <label for="lastname">Nom :</label>
-        <input type="text" id="lastname" name="lastname" required pattern="[A-Za-zÀ-ÿ\- ]{2,}" title="Seuls les lettres, espaces et tirets sont autorisés. Minimum 2 caractères.">
-
-        <label for="firstname">Prénom :</label>
-        <input type="text" id="firstname" name="firstname" required pattern="[A-Za-zÀ-ÿ\- ]{2,}" title="Seuls les lettres, espaces et tirets sont autorisés. Minimum 2 caractères.">
-
-        <label for="email">Email :</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="password">Mot de passe :</label>
-        <input type="password" id="password" name="password" required minlength="8" title="Le mot de passe doit contenir au moins 8 caractères.">
-
-        <button type="submit">S'inscrire</button>
-
-        <p id="submit"><?= $message ?></p>
+    <h1>Inscription</h1>
+    <form action="" method="post">
+        <input type="text" name="lastname" placeholder="Le Nom de Famille">
+        <input type="text" name="firstname" placeholder="Le Prénom">
+        <input type="text" name="email" placeholder="L'Email'">
+        <input type="password" name="password" placeholder="Le Mot de Passe">
+        <input type="submit" name="submitSignUp">
     </form>
+    <p><?php echo $message ?></p>
 </section>
-
 <section>
+    <h1>Liste d'Utilisateurs</h1>
     <ul>
-        <!--Liste de compte-->
-        <?php foreach ($users as $user): ?>
-            <li>
-                <?php echo htmlspecialchars($user['firstname']) . ' ' . htmlspecialchars($user['lastname']); ?> 
-                (<?php echo htmlspecialchars($user['email']); ?>)
-            </li>
-        <?php endforeach; ?>
+        <?php echo $listUsers ?>
     </ul>
+</section>
+<section>
+    <h2>Connexion</h2>
+    <form action="" method="post">
+        <input type="email" name="email" placeholder="L'email">
+        <input type="password" name="password" placeholder="Le Mot de Passe">
+        <input type="submit" name="submitSignIn">
+    </form>
+    <p><?php echo $message2 ?></p>
 </section>
