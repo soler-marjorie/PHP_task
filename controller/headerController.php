@@ -1,9 +1,9 @@
 <?php
 function renderHeader(){
     $nav = '';
-    if(!isset($_SESSION['id'])){
-        $nav = '<a href="myAccount.php">Mon compte</a>
-            <a href="deco.php">Déconnexion</a>';
+    if(isset($_SESSION['id'])){
+       $nav='<a href="myAccount.php">Mon Compte</a>
+            <a href="./controller/deconnexionController.php">Se Déconnecter</a>';
     }
-    include './vue/layout/header.php';
+    include './vue/header.php';
 }
