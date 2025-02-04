@@ -12,6 +12,5 @@ $bdd = connexion();
 include './vue/header.php';
 ajouterCategory($bdd);
 renderAccounts($bdd);
-
 include './vue/footer.php';
 

@@ -1,8 +1,3 @@
-<?php
-    //Activer la session
-    session_start();
-?>
-
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -12,17 +7,4 @@
 <body>
     <header>
         <h1>Accueil</h1>
-        <nav>
-            <ul>
-                <li>
-                    <a href="index.php">Accueil</a>
-                </li>
-                <li>
-                    <a href="myAccount.php">Mon compte</a>
-                </li>
-                <li>
-                    <a href="deco.php">Déconnexion</a>
-                </li>
-            </ul>
-        </nav>
     </header>

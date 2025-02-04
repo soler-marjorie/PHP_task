@@ -15,12 +15,3 @@
         <?php echo $listUsers ?>
     </ul>
 </section>
-<section>
-    <h2>Connexion</h2>
-    <form action="" method="post">
-        <input type="email" name="email" placeholder="L'email">
-        <input type="password" name="password" placeholder="Le Mot de Passe">
-        <input type="submit" name="submitSignIn">
-    </form>
-    <p><?php echo $message2 ?></p>
-</section>
