@@ -99,7 +99,7 @@ function signIn(PDO $bdd){
         $_SESSION['lastname']= $data['lastname'];
         $_SESSION['email']= $data['email'];
 
-        header('location:index.php');
+        header('location:/');
         exit;
 
         return $_SESSION['firstname']. " ".$_SESSION['lastname']." est connecté !";

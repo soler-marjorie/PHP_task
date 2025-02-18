@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +7,7 @@
 <body>
     <header>
         <nav>
-            <a href="index.php">Accueil</a>
+            <a href="/">Accueil</a>
             <?php echo $nav ?>
         </nav>
         
