@@ -1,5 +1,5 @@
 <?php
-abstract class AbstractController{
+abstract class AbstractController {
     private ?array $listModel;
 
     /**
@@ -7,6 +7,8 @@ abstract class AbstractController{
      * [
      *  header => ViewHeader,
      *  footer => ViewFooter,
+     *  myAccount => viewMyAccount,
+     *  deco => viewDeco,
      *  les autres vues...
      * ]
      */
@@ -69,4 +71,5 @@ abstract class AbstractController{
         echo $footer['footer']->displayView();
     }
 
+    
 }

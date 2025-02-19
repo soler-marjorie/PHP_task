@@ -1,7 +1,11 @@
 <?php
 
 abstract class AbstractModel{
-    private InterfaceBdd $bdd;
+    private ?InterfaceBdd $bdd;
+
+    public function __construct(?InterfaceBdd $bdd){
+        $this->bdd = $bdd;
+    }
 
     /**
      * Get the value of bdd
@@ -22,15 +26,15 @@ abstract class AbstractModel{
     }
 
     
-    public abstract function addAccount(PDO $bdd, array $account): void;
+    public abstract function addAccount(): void;
 
-    public abstract function updateAccount(PDO $bdd, array $account): void;
+    public abstract function updateAccount(): void;
 
-    public abstract function deleteAccount(PDO $bdd, string $email): void;
+    public abstract function deleteAccount(): void;
 
-    public abstract function getAllAccount(PDO $bdd): array|null|string;
+    public abstract function getAllAccount(): array|null;
 
-    public abstract function getAccountByEmail(PDO $bdd, string $email): array|null|string;
+    public abstract function getAccountById(): array|null;
 
 
 }
