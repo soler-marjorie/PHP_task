@@ -3,16 +3,16 @@ abstract class AbstractController{
     private ?array $listModel;
 
     /**
-     * $listView : tableau associatif démarrant avec
-     *[
-     * header => viewHeader,
-     * footer => viewFooter,
-     * les autres list de vue
+     * $listView : tableau associatif démarrant avec :
+     * [
+     *  header => ViewHeader,
+     *  footer => ViewFooter,
+     *  les autres vues...
      * ]
      */
     private ?array $listView;
 
-    public function __constructor(?array $listModel, ?array $listView){
+    public function __construct(?array $listModel, ?array $listView){
         $this->listModel = $listModel;
         $this->listView = $listView;
     }
@@ -55,17 +55,18 @@ abstract class AbstractController{
 
     public abstract function render(): void;
 
-    public function renderHeader():void{
+    public function renderHeader(): void{
         if(isset($_SESSION['id'])){
             $this->getListView()['header']->setNav('<a href="/moncompte">Mon Compte</a>
                  <a href="/deconnexion">Se Déconnecter</a>');
         }
-        echo "<header>Coucou header</header>";
+        echo $this->getListView()['header']->displayView();
+        
     }
 
     public function renderFooter(){
         $footer = $this->getListView();
-        $footer['footer']->displayView();
+        echo $footer['footer']->displayView();
     }
 
 }

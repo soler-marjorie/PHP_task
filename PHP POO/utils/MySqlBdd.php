@@ -6,9 +6,11 @@
 function connexion(): PDO
 {
     return new PDO(
-        'mysql:host=' . URL_BDD . ';dbname=' . NAME_BDD,
-        LOGIN_BDD,
-        PASSWORD_BDD,
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+        dsn: 'mysql:host=' . 'localhost' . ';dbname=' . 'task',
+        username: 'root',
+        password: "",
+        options: [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
     );
 }
+
+
