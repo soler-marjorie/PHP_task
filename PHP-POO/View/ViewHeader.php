@@ -33,7 +33,7 @@ class Header implements InterfaceView{
         <body>
             <header>
                 <nav>
-                    <a href="/">Accueil</a>
+                    <a href="/projet/task/PHP-POO/">Accueil</a>
                     <?php echo $this->getHeader() ?>
                 </nav>
         </header>
